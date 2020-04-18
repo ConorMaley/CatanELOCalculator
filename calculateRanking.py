@@ -6,7 +6,7 @@ def Probability(rating1, rating2):
 	return 1.0 * 1.0 / (1 + 1.0 * math.pow(10, 1.0 * (rating1 - rating2) / 400))
 
 def CalcElo(PlayerELO, OppELO, ScoreConstant, Status):
-	Pb = Probability(PlayerELO, OppELO)
+	# Pb = Probability(PlayerELO, OppELO)
 	Pa = Probability(OppELO, PlayerELO)
 
 	# # Player Wins
