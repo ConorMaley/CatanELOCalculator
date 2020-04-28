@@ -40,32 +40,25 @@ def CalcElo(PlayerELO, OppELO, ScoreConstant, Status):
 
 with open(sys.argv[1]) as input_file:
 	csv_reader = csv.reader(input_file, delimiter=',')
-	line_count = 0
 	Elos = {}
 	playersArray = []
 
-	for row in csv_reader:
+	for line_count, row in enumerate(csv_reader):
 		if line_count == 0:
 			for name in row[1:]:
 				Elos[name] = 1200
 				playersArray.append(name)
 			# print(f'Column names are {", ".join(row)}')
 		else:
-			index = 0
 			Gamescore = {}
 			OldElos = {}
-			for score in row[1:]:
+			for index, score in enumerate(row[1:]):
 				if int(score) >= 2:
 					Gamescore[playersArray[index]] = score
 					OldElos[playersArray[index]] = Elos[playersArray[index]]
-				index += 1
-			#someone pls tell me if there's a better way to do this
-			index = 0
-			# print(f'{Gamescore}')
-			for player, score in Gamescore.items():
-				jindex = 0 #lol thank u pbr
+			for index, (player, score) in enumerate(Gamescore.items()):
 				scoreChange = 0
-				for opp, oppScore in Gamescore.items():
+				for jindex, (opp, oppScore) in enumerate(Gamescore.items()):
 					if index != jindex:
 						if int(score) > int(oppScore):
 							status = 1
@@ -78,16 +71,12 @@ with open(sys.argv[1]) as input_file:
 						tempSC = CalcElo(Elos[player], OldElos[opp], 30, status)
 						# print(f'{player} {Elos[player]} scored {score}, Opponent {opp} {OldElos[opp]} scored {oppScore}, change to player {tempSC}')
 						scoreChange += tempSC
-					jindex += 1
 				# print(f'{player} scoreChange = {scoreChange}')
 				Elos[player] += round(scoreChange, 2)
-				index += 1
 
 		print(f'=============ELO after {line_count} games=============')
-		for val in Elos:
+		for val in sorted(Elos, key=Elos.get, reverse=True):
 			print(f'{val}: {Elos[val]}')
-
-		line_count += 1
 
 	#todo: write to rankings in google sheet
 	

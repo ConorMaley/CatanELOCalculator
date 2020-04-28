@@ -68,7 +68,7 @@ All players begin with a score of 1200 at their first game.
 
 ## Future improvements
 _There's a lot of them..._
-- Sort after completing
+- ~~Sort after completing~~
 - Provide different options
 - Variable K constant: weight by date
 - Hook up google sheets API for easy updates
