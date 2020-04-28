@@ -41,7 +41,12 @@ def CalcElo(PlayerELO, OppELO, ScoreConstant, Status):
 with open(sys.argv[1]) as input_file:
 	csv_reader = csv.reader(input_file, delimiter=',')
 	Elos = {}
+	
 	playersArray = []
+	highestELO = {}
+	highestELO['score'] = 1200
+	lowestELO = {}
+	lowestELO['score'] = 1200
 
 	for line_count, row in enumerate(csv_reader):
 		if line_count == 0:
@@ -75,13 +80,23 @@ with open(sys.argv[1]) as input_file:
 				Elos[player] += round(scoreChange, 2)
 
 		print(f'=============ELO after {line_count} games=============')
-		for val in sorted(Elos, key=Elos.get, reverse=True):
-			print(f'{val}: {Elos[val]}')
-
+		for name in sorted(Elos, key=Elos.get, reverse=True):
+			# not very efficient
+			if Elos[name] > highestELO['score']:
+				highestELO['score'] = Elos[name]
+				highestELO['player'] = name
+				highestELO['game'] = line_count
+			elif Elos[name] < lowestELO['score']:
+				lowestELO['score'] = Elos[name]
+				lowestELO['player'] = name
+				lowestELO['game'] = line_count
+			print(f'{name}: {Elos[name]}')
+	
+	print(f'Highest ELO: {highestELO}')
+	print(f'Lowest ELO: {lowestELO}')
 	#todo: write to rankings in google sheet
 	
-	# avg = 0
-	# for val in Elos:
+	# for avg, val in enumerate(Elos):
 	# 	avg += Elos[val]
 	# 	print(f'{val}: {Elos[val]}')
 	# avg = avg/len(Elos)
