@@ -5,7 +5,7 @@ import math
 def Probability(rating1, rating2):
 	return 1.0 * 1.0 / (1 + 1.0 * math.pow(10, 1.0 * (rating1 - rating2) / 400))
 
-def CalcElo(PlayerELO, OppELO, ScoreConstant, Status):
+def CalcEloChange(PlayerELO, OppELO, ScoreConstant, Status):
 	# Pb = Probability(PlayerELO, OppELO)
 	Pa = Probability(OppELO, PlayerELO)
 
@@ -73,13 +73,13 @@ with open(sys.argv[1]) as input_file:
 							status = 0
 						# print(f'{status} = status')
 						# K is constant for now
-						tempSC = CalcElo(Elos[player], OldElos[opp], 30, status)
+						tempSC = CalcEloChange(Elos[player], OldElos[opp], 30, status)
 						# print(f'{player} {Elos[player]} scored {score}, Opponent {opp} {OldElos[opp]} scored {oppScore}, change to player {tempSC}')
 						scoreChange += tempSC
 				# print(f'{player} scoreChange = {scoreChange}')
 				Elos[player] += round(scoreChange, 2)
 
-		print(f'=============ELO after {line_count} games=============')
+		# print(f'=============ELO after {line_count} games=============')
 		for name in sorted(Elos, key=Elos.get, reverse=True):
 			# not very efficient
 			if Elos[name] > highestELO['score']:
@@ -90,10 +90,12 @@ with open(sys.argv[1]) as input_file:
 				lowestELO['score'] = Elos[name]
 				lowestELO['player'] = name
 				lowestELO['game'] = line_count
-			print(f'{name}: {Elos[name]}')
+			# print(f'{name}: {Elos[name]}')
+		# print(f'{sorted( ((name, score) for score, name in Elos.items()), reverse=True)}')
+		# newScore = '{} : {}'.format(name, score) for score, name in Elos.items() }
+		# print(f'{newScore}')
+		# print(f'Game {line_count} {repr(Elos.items())}')
 	
-	print(f'Highest ELO: {highestELO}')
-	print(f'Lowest ELO: {lowestELO}')
 	#todo: write to rankings in google sheet
 	
 	# for avg, val in enumerate(Elos):
@@ -101,3 +103,12 @@ with open(sys.argv[1]) as input_file:
 	# 	print(f'{val}: {Elos[val]}')
 	# avg = avg/len(Elos)
 	# print(f'Avg Elo: {avg}')
+
+	# Final rankings
+	print('=============Final ELO count=============')
+
+	print(f'Highest ELO: {highestELO}')
+	print(f'Lowest ELO: {lowestELO}')
+
+	for name in sorted(Elos, key=Elos.get, reverse=True):
+		print(f'{name}: {Elos[name]}')
