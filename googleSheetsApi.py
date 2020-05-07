@@ -39,7 +39,7 @@ def getGoogleAPIService():
     return build('sheets', 'v4', credentials=creds)
 
 def getMasterSheet():
-    RANGE_ID = 'MasterCSV!A1:J'
+    RANGE_ID = 'master!A1:J'
     service = getGoogleAPIService()
 
     # Call the Sheets API
@@ -49,7 +49,7 @@ def getMasterSheet():
     return result.get('values', [])
 
 def main():
-    RANGE_ID = 'MasterCSV!A1:J'
+    RANGE_ID = 'master!A1:J'
     service = getGoogleAPIService()
 
     # Call the Sheets API
